@@ -1,9 +1,23 @@
 package com.rrs.taskflow.response;
 
-public class ApiResponse<T>{
+public class ApiResponse<T> {
 
     private String message;
     private T data;
+
+    // ================= CONSTRUCTORS =================
+
+    public ApiResponse(String message, T data) {
+        this.message = message;
+        this.data = data;
+    }
+
+    public ApiResponse(String message) {
+        this.message = message;
+        this.data = null;
+    }
+
+    // ================= GETTERS AND SETTERS =================
 
     public String getMessage() {
         return message;

@@ -2,65 +2,62 @@ package com.rrs.taskflow.entities;
 
 import com.rrs.taskflow.enums.ProjectStatus;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "projects")
 public class ProjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String name;
-    @Column(length = 100)
+
+    @Column(length = 1000)
     private String description;
+
     @Enumerated(EnumType.STRING)
-    private ProjectStatus projectStatus;
     @Column(nullable = false)
+    private ProjectStatus projectStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private UserEntity createdBy;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-
-    public String getName() {
-        return name;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public ProjectStatus getProjectStatus() {
-        return projectStatus;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setProjectStatus(ProjectStatus projectStatus) {
-        this.projectStatus = projectStatus;
-    }
+    public ProjectStatus getProjectStatus() { return projectStatus; }
+    public void setProjectStatus(ProjectStatus projectStatus) { this.projectStatus = projectStatus; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public UserEntity getCreatedBy() { return createdBy; }
+    public void setCreatedBy(UserEntity createdBy) { this.createdBy = createdBy; }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

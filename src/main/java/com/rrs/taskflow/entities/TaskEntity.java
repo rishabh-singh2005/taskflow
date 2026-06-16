@@ -3,128 +3,93 @@ package com.rrs.taskflow.entities;
 import com.rrs.taskflow.enums.Priority;
 import com.rrs.taskflow.enums.TaskStatus;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "tasks")
 public class TaskEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(length = 2000)
     private String description;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TaskStatus status;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Priority priority;
+
     private LocalDateTime dueDate;
+
     private String attachmentUrl;
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name= "assigned_to")
+    @JoinColumn(name = "assigned_to")
     private UserEntity assignedTo;
 
     @ManyToOne
-    @JoinColumn(name = "created_by")
+    @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
-    @Column
-    @JoinColumn(name = "project_id")
-    private ProjectEntity projectEntity;
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private ProjectEntity project;
 
-    public String getTitle() {
-        return title;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public TaskStatus getStatus() {
-        return status;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setStatus(TaskStatus status) {
-        this.status = status;
-    }
+    public TaskStatus getStatus() { return status; }
+    public void setStatus(TaskStatus status) { this.status = status; }
 
-    public Priority getPriority() {
-        return priority;
-    }
+    public Priority getPriority() { return priority; }
+    public void setPriority(Priority priority) { this.priority = priority; }
 
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
+    public LocalDateTime getDueDate() { return dueDate; }
+    public void setDueDate(LocalDateTime dueDate) { this.dueDate = dueDate; }
 
-    public LocalDateTime getDueDate() {
-        return dueDate;
-    }
+    public String getAttachmentUrl() { return attachmentUrl; }
+    public void setAttachmentUrl(String attachmentUrl) { this.attachmentUrl = attachmentUrl; }
 
-    public void setDueDate(LocalDateTime dueDate) {
-        this.dueDate = dueDate;
-    }
+    public UserEntity getAssignedTo() { return assignedTo; }
+    public void setAssignedTo(UserEntity assignedTo) { this.assignedTo = assignedTo; }
 
-    public String getAttachmentUrl() {
-        return attachmentUrl;
-    }
+    public UserEntity getCreatedBy() { return createdBy; }
+    public void setCreatedBy(UserEntity createdBy) { this.createdBy = createdBy; }
 
-    public void setAttachmentUrl(String attachmentUrl) {
-        this.attachmentUrl = attachmentUrl;
-    }
+    public ProjectEntity getProject() { return project; }
+    public void setProject(ProjectEntity project) { this.project = project; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public UserEntity getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(UserEntity assignedTo) {
-        this.assignedTo = assignedTo;
-    }
-
-    public UserEntity getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(UserEntity createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public ProjectEntity getProjectEntity() {
-        return projectEntity;
-    }
-
-    public void setProjectEntity(ProjectEntity projectEntity) {
-        this.projectEntity = projectEntity;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
