@@ -40,7 +40,7 @@ public class SecurityConfig {
 
         configuration.addAllowedOrigin("http://localhost:5500");
         configuration.addAllowedOrigin("http://127.0.0.1:5500");
-        configuration.addAllowedOrigin("https://taskflow-frontend.vercel.app");
+        configuration.addAllowedOrigin("https://taskflow-web-lime.vercel.app");
 
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
